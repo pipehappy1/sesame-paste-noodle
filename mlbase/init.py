@@ -9,7 +9,7 @@ class WeightInitializer:
         raise NotImplementedError()
 
 class XavierInit(WeightInitializer):
-    def __init__(self, nonlinearGain=2):
+    def __init__(self, nonlinearGain=1):
         self.nonlinearGain = nonlinearGain
 
     def initialize(self, shape):
