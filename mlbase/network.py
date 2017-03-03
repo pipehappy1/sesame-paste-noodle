@@ -9,7 +9,7 @@ import mlbase.learner as learner
 import mlbase.gradient_optimizer as opt
 import mlbase.regularization as reg
 import collections
-import mlbase.layers.layer as layer
+from .layers.layer import Layer
 from mlbase.layers.rawinput import RawInput
 
         
@@ -110,18 +110,9 @@ class Network(learner.SupervisedLearner):
         if self.learner is not None or self.predicter is not None:
             self.build(reload=True)
 
-    # The following methods are for
-    # network composition.
-    # Network is either a DAG
-    # or a time-expanded network.
-    def layerNextCounter(self):
-        counterStr = '{:05d}'.format(self.layerCounter)
-        self.layerCounter += 1
-        return counterStr
-    
     def setInput(self, inputLayer, reload=False):
         if not reload:
-            layerCounter = self.layerNextCounter()
+            layerCounter = Layer.nextCounter()
             inputLayer.name = inputLayer.LayerTypeName + layerCounter
             inputLayer.saveName = inputLayer.LayerTypeName + layerCounter
             
@@ -138,7 +129,7 @@ class Network(learner.SupervisedLearner):
             print("Append {} to {}".format(layer.debugname, self.currentLayer.debugname))
 
         if not reload:
-            layerCounter = self.layerNextCounter()
+            layerCounter = Layer.nextCounter()
             layer.name = layer.LayerTypeName + layerCounter
             layer.saveName = layer.LayerTypeName + layerCounter
         
@@ -151,7 +142,7 @@ class Network(learner.SupervisedLearner):
     def connect(self, prelayer, nextlayer, reload=False):
             
         if not reload:
-            layerCounter = self.layerNextCounter()
+            layerCounter = Layer.nextCounter()
             nextlayer.name = nextlayer.LayerTypeName + layerCounter
             nextlayer.saveName = nextlayer.LayerTypeName + layerCounter
 

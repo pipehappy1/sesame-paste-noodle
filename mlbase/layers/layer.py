@@ -15,6 +15,8 @@ class Layer(yaml.YAMLObject):
     LayerTypeName = 'Layer'
     yaml_tag = u'!Layer'
 
+    layerCounter = 0
+
     def __init__(self):
         # Layer name may used to print/debug
         # per instance
@@ -140,6 +142,16 @@ class Layer(yaml.YAMLObject):
             return cdag
         else:
             return super().__new__(cls)
+
+    # The following methods are for
+    # network composition.
+    # Network is either a DAG
+    # or a time-expanded network.
+    @classmethod
+    def nextCounter(cls):
+        counterStr = '{:08d}'.format(cls.layerCounter)
+        cls.layerCounter += 1
+        return counterStr
 
 
 
