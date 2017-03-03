@@ -119,10 +119,13 @@ class DAGPlan(DAGBase, yaml.YAMLObject, metaclass=DAGPlanMeta):
         ret.layer = objdict['layer']
         return ret
 
-
-    
-
+        
+# layer defined with this DAG metaclass is not meant
+# to be subclassed(however it allow load from saved model without the class definition).
+# if want to be subclassable, use the other metaclass
+# (this requires class definition when load saved model)
 class DAG(yaml.YAMLObjectMetaclass):
+            
     def __new__(cls, name, bases, namespace, **kwds):
         result = super().__new__(cls, name, bases, dict(namespace))
 
@@ -227,32 +230,41 @@ class DAG(yaml.YAMLObjectMetaclass):
         result.forwardSize = forwardSize
 
         # save and load stuff
+        # for DAG layers, the components are saved
+        # and this DAG layer is not saved.
+        # This allows load saved model without the DAG class definition.
         def fillToObjMap(selfc):
-            objDict = super(result, selfc).fillToObjMap()
+
+            # Don't save this DAG defined layer
+            # objDict = super(result, selfc).fillToObjMap()
+            
             # don't save the class, saving class cause a lots of trouble'
             # recover the class from the instance instead.
             # objDict['obj'] = selfc.dag
-            objDict['objdag'] = selfc.objdag
-            return objDict
+            # objDict['objdag'] = selfc.objdag
+            # return objDict
+            return 
         result.fillToObjMap = fillToObjMap
 
         def loadFromObjMap(selfc, tmap):
-            super(result, selfc).loadFromObjMap(tmap)
-            selfc.objdag = tmap['objdag']
+            raise NotImplementedError
+            # super(result, selfc).loadFromObjMap(tmap)
+            # selfc.objdag = tmap['objdag']
             return
         result.loadFromObjMap = loadFromObjMap
 
         def to_yaml(cls, dumper, data):
-            obj_dict = data.fillToObjMap()
+            
             node = dumper.represent_mapping(cls.yaml_tag, obj_dict)
             return node
         result.to_yaml = classmethod(to_yaml)
 
         def from_yaml(cls, loader, node):
-            obj_dict = loader.construct_mapping(node)
-            ret = result()
-            ret.loadFromObjMap(obj_dict)
-            return ret
+            raise NotImplementedError
+            # obj_dict = loader.construct_mapping(node)
+            # ret = result()
+            # ret.loadFromObjMap(obj_dict)
+            # return ret
         result.from_yaml = classmethod(from_yaml)
         
         return result    

@@ -488,5 +488,35 @@ def test_mlp():
         n.train(trX, trY)
         print(1 - np.mean(np.argmax(teY, axis=1) == np.argmax(n.predict(teX), axis=1)))
 
+        
+def test_dagmlp():
+    n = N.Network()
+    n.saveInterval = 1
+
+    def mlp_dag():
+        x1 = DAGPlan.input()
+        y1 = Elu(FullConn(Flatten(x1), feature_map_multiplier=2))
+        return y1
+
+    dagplan = mlp_dag()
+
+    class Mlp(Layer, metaclass=DAG, dag=dagplan,
+              yaml_tag=u'!mlp', type_name='mlp'):
+        pass
+
+    n.setInput(RawInput((1, 28, 28)))
+    n.append(Mlp())
+    n.append(FullConn(output_feature=10))
+    n.append(output.SoftMax())
+
+    n.build()
+
+    trX, trY, teX, teY = l.load_mnist()
+
+    for i in range(100):
+        print(i)
+        n.train(trX, trY)
+        print(1 - np.mean(np.argmax(teY, axis=1) == np.argmax(n.predict(teX), axis=1)))
+
 if __name__ == "__main__":
-    test_mlp()
+    test_dagmlp()
