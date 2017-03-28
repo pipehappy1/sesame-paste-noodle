@@ -498,9 +498,7 @@ def test_dagmlp():
         y1 = Elu(FullConn(Flatten(x1), feature_map_multiplier=2))
         return y1
 
-    dagplan = mlp_dag()
-
-    class Mlp(Layer, metaclass=DAG, dag=dagplan,
+    class Mlp(Layer, metaclass=DAG, dag=mlp_dag(),
               yaml_tag=u'!mlp', type_name='mlp'):
         pass
 

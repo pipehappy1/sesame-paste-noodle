@@ -254,8 +254,10 @@ class DAG(yaml.YAMLObjectMetaclass):
         result.loadFromObjMap = loadFromObjMap
 
         def to_yaml(cls, dumper, data):
-            
-            node = dumper.represent_mapping(cls.yaml_tag, obj_dict)
+            allObjs = []
+            for item in data.objdag.nextNode():
+                allObjs.append(item)
+            node = dumper.represent_sequence(cls.yaml_tag, allObjs)
             return node
         result.to_yaml = classmethod(to_yaml)
 
