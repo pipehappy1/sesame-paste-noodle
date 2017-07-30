@@ -68,6 +68,8 @@ def trackingNetwork():
 
 imagef = '/hdd/home/yueguan/workspace/sesame-paste-noodle-dev/examples/Large_Pinus_glabra.jpg'
     out = scipy.ndimage.zoom(out, (1, density_ratio, density_ratio))
+    out[out<0] = 0
+    out[out>1] = 1
     out[:, int(center[0]-radius):int(center[0]+radius), int(center[1]-radius):int(center[1]+radius)] = img[:, int(center[0]-radius):int(center[0]+radius), int(center[1]-radius):int(center[1]+radius)]
     
     return out
@@ -75,7 +77,7 @@ imagef = '/hdd/home/yueguan/workspace/sesame-paste-noodle-dev/examples/Large_Pin
 
     
 
-imagef = '/Users/yguan/workspace/sesame-paste-noodle/examples/Large_Pinus_glabra.jpg'
+imagef = '/hdd/home/yueguan/workspace/sesame-paste-noodle-dev/examples/Large_Pinus_glabra.jpg'
 
 
 img = readImage(imagef)
@@ -83,4 +85,6 @@ img = eyeWindow(img, (1000, 1000), 200, 16)
 img = drawBBox(img, 800, 800, 1200, 1200)
 pilimg = back2PIL(img)
 
+pilimg.save('test.jpg')
+#pilimg.show()
 
