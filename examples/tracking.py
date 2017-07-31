@@ -1,6 +1,7 @@
 from PIL import Image
 import numpy as np
 import scipy.ndimage
+from mlbase import network as N
 
 # task here:
 # 1. eye window, for a input image, the focus has high resolution and low resolution at other place.
@@ -57,8 +58,14 @@ def eyeWindow(img, center, radius, density_ratio):
     out[:, int(center[0]-radius):int(center[0]+radius), int(center[1]-radius):int(center[1]+radius)] = img[:, int(center[0]-radius):int(center[0]+radius), int(center[1]-radius):int(center[1]+radius)]
     
     return out
+
+    
+def trackingNetwork():
+    n = N.Network()
+
     
 
+    return n
     
 
 imagef = '/hdd/home/yueguan/workspace/sesame-paste-noodle-dev/examples/Large_Pinus_glabra.jpg'
@@ -68,4 +75,5 @@ img = eyeWindow(img, (1000, 1000), 200, 16)
 img = drawBBox(img, 800, 800, 1200, 1200)
 pilimg = back2PIL(img)
 pilimg.save('test.jpg')
+
 #pilimg.show()
