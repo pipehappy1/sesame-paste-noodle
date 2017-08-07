@@ -3,7 +3,6 @@ import numpy as np
 import scipy.ndimage
 from mlbase import network as N
 
-
 # task here:
 # 1. eye window, for a input image, the focus has high resolution and low resolution at other place.
 # 2. move the image is the same as move the high resolution window.
@@ -63,6 +62,7 @@ def eyeWindow(img, center, radius, density_ratio):
     
 def trackingNetwork():
     n = N.Network()
+
     return n
     
 
@@ -75,16 +75,16 @@ imagef = '/hdd/home/yueguan/workspace/sesame-paste-noodle-dev/examples/Large_Pin
     return out
     
 
-    
 
 imagef = '/hdd/home/yueguan/workspace/sesame-paste-noodle-dev/examples/Large_Pinus_glabra.jpg'
-
 
 img = readImage(imagef)
 img = eyeWindow(img, (1000, 1000), 200, 16)
 img = drawBBox(img, 800, 800, 1200, 1200)
 pilimg = back2PIL(img)
 
+
 pilimg.save('test.jpg')
 #pilimg.show()
+
 
