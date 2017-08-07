@@ -46,7 +46,7 @@ def back2PIL(a):
     img = Image.fromarray(c3)
     return img
 
-def eyeWindow(img, center, radius, density_ratio):
+def eyeWindow2(img, center, radius, density_ratio):
     (channel, width, height) = img.shape
     out = np.array(img)
     out = scipy.ndimage.zoom(out, (1, 1/density_ratio, 1/density_ratio))
@@ -59,21 +59,10 @@ def eyeWindow(img, center, radius, density_ratio):
     
     return out
 
-    
-def trackingNetwork():
-    n = N.Network()
 
-    return n
+
     
 
-imagef = '/hdd/home/yueguan/workspace/sesame-paste-noodle-dev/examples/Large_Pinus_glabra.jpg'
-    out = scipy.ndimage.zoom(out, (1, density_ratio, density_ratio))
-    out[out<0] = 0
-    out[out>1] = 1
-    out[:, int(center[0]-radius):int(center[0]+radius), int(center[1]-radius):int(center[1]+radius)] = img[:, int(center[0]-radius):int(center[0]+radius), int(center[1]-radius):int(center[1]+radius)]
-    
-    return out
-    
 
 
 imagef = '/hdd/home/yueguan/workspace/sesame-paste-noodle-dev/examples/Large_Pinus_glabra.jpg'
@@ -82,8 +71,6 @@ img = readImage(imagef)
 img = eyeWindow(img, (1000, 1000), 200, 16)
 img = drawBBox(img, 800, 800, 1200, 1200)
 pilimg = back2PIL(img)
-
-
 pilimg.save('test.jpg')
 #pilimg.show()
 
